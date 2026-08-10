@@ -505,8 +505,8 @@ class Invoice(Base):
     due_date = Column(DateTime, nullable=True)
     paid_at = Column(DateTime, nullable=True)
     
-    # Metadata
-    metadata = Column(Text, nullable=True)  # JSON string
+    # Additional data (renamed from 'metadata' which is reserved)
+    additional_data = Column(Text, nullable=True)  # JSON string
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

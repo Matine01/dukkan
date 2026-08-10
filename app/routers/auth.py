@@ -4,7 +4,7 @@ Handles user registration, login, token management, and API keys.
 """
 
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Annotated
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
 from sqlalchemy.orm import Session
 import logging
@@ -18,8 +18,11 @@ from app.schemas import (
 from app.dependencies import (
     get_current_user, verify_password, get_password_hash,
     create_access_token, hash_api_key, generate_api_key,
-    log_activity, CurrentUser, DbSession
+    log_activity, CurrentUser, get_db
 )
+from sqlalchemy.orm import Session
+
+DbSession = Annotated[Session, Depends(get_db)]
 from app.config import settings
 
 logger = logging.getLogger(__name__)

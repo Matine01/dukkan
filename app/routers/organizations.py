@@ -14,10 +14,16 @@ from app.schemas import (
     OrganizationCreate, OrganizationUpdate, OrganizationResponse,
     UserResponse
 )
+from typing import List, Annotated
+from fastapi import Depends
+
 from app.dependencies import (
     get_current_user, is_org_admin, is_superadmin,
-    log_activity, CurrentUser, DbSession
+    log_activity, CurrentUser, get_db
 )
+from sqlalchemy.orm import Session
+
+DbSession = Annotated[Session, Depends(get_db)]
 
 logger = logging.getLogger(__name__)
 

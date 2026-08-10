@@ -15,8 +15,14 @@ from app.schemas import (
     NetworkCreate, NetworkUpdate, NetworkResponse,
     FirewallRuleCreate, FirewallRuleUpdate, FirewallRuleResponse
 )
+from typing import Annotated
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+DbSession = Annotated[Session, Depends(get_db)]
+
 from app.dependencies import (
-    get_current_user, is_org_admin, log_activity, CurrentUser, DbSession
+    get_current_user, is_org_admin, log_activity, CurrentUser
 )
 from app.services.proxmox_service import proxmox_service
 

@@ -15,8 +15,14 @@ from app.models import (
     UsageLog, Invoice, VirtualMachine, Volume, Organization, UserRole
 )
 from app.schemas import UsageLogResponse, InvoiceResponse, BillingSummary
+from typing import Annotated
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+DbSession = Annotated[Session, Depends(get_db)]
+
 from app.dependencies import (
-    get_current_user, is_org_admin, is_superadmin, log_activity, CurrentUser, DbSession
+    get_current_user, is_org_admin, is_superadmin, log_activity, CurrentUser
 )
 from app.config import settings
 
