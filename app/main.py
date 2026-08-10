@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from slowapi import SlowAPI, _rate_limit_exceeded_handler
+from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 import uvicorn
@@ -34,8 +34,7 @@ logger = logging.getLogger(__name__)
 
 
 # Initialize rate limiter
-rate_limiter = SlowAPI()
-rate_limiter.limiter.limit(f"{settings.RATE_LIMIT_PER_MINUTE}/minute")(None)
+rate_limiter = Limiter(key_func=get_remote_address)
 
 
 @asynccontextmanager

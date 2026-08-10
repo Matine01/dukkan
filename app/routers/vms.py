@@ -19,9 +19,15 @@ from app.schemas import (
     VMCreateLXC, VMCreateQEMU, VMResponse, VMWithGuacamole,
     VMUpdate, PaginatedResponse
 )
+from typing import Annotated
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+DbSession = Annotated[Session, Depends(get_db)]
+
 from app.dependencies import (
     get_current_user, get_vm_or_404, is_superadmin, is_org_admin,
-    log_activity, CurrentUser, DbSession, get_websocket_user
+    log_activity, CurrentUser, get_websocket_user
 )
 from app.services.proxmox_service import proxmox_service, ProxmoxAPIError
 from app.services.guacamole_service import guacamole_service, GuacamoleAPIError
@@ -332,7 +338,7 @@ async def create_qemu(
 @router.get("/{vm_id}", response_model=VMWithGuacamole)
 async def get_vm(
     vm: VirtualMachine = Depends(get_vm_or_404),
-    db: DbSession = Depends(get_db)
+    current_user: User = Depends(get_current_user)
 ):
     """
     Get virtual machine details with secure console URL.
@@ -361,7 +367,7 @@ async def get_vm(
 @router.post("/{vm_id}/start")
 async def start_vm(
     vm: VirtualMachine = Depends(get_vm_or_404),
-    db: DbSession = Depends(get_db),
+    db: DbSession,
     request: Request = None,
     current_user: CurrentUser = None
 ):
@@ -402,7 +408,7 @@ async def start_vm(
 @router.post("/{vm_id}/stop")
 async def stop_vm(
     vm: VirtualMachine = Depends(get_vm_or_404),
-    db: DbSession = Depends(get_db),
+    db: DbSession,
     request: Request = None,
     current_user: CurrentUser = None
 ):
@@ -435,7 +441,7 @@ async def stop_vm(
 @router.post("/{vm_id}/restart")
 async def restart_vm(
     vm: VirtualMachine = Depends(get_vm_or_404),
-    db: DbSession = Depends(get_db),
+    db: DbSession,
     request: Request = None,
     current_user: CurrentUser = None
 ):
@@ -467,7 +473,7 @@ async def restart_vm(
 @router.delete("/{vm_id}")
 async def delete_vm(
     vm: VirtualMachine = Depends(get_vm_or_404),
-    db: DbSession = Depends(get_db),
+    db: DbSession,
     request: Request = None,
     current_user: CurrentUser = None
 ):

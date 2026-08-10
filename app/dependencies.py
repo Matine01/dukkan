@@ -325,12 +325,11 @@ async def get_vm_or_404(
     return vm
 
 
-# Type aliases for cleaner dependency injection
+# Type aliases for cleaner dependency injection (without Depends for use in function signatures)
 CurrentUser = Annotated[User, Depends(get_current_user)]
 CurrentOrg = Annotated[Organization, Depends(get_organization_from_user)]
 SuperAdminUser = Annotated[User, Depends(is_superadmin)]
 OrgAdminUser = Annotated[User, Depends(is_org_admin)]
-DbSession = Annotated[Session, Depends(get_db)]
 
 
 # ============================================================================

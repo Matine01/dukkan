@@ -17,9 +17,15 @@ from app.schemas import (
     PlatformStats, UserResponse, OrganizationResponse,
     AdminUserCreate, ActivityLogResponse
 )
+from typing import Annotated
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+DbSession = Annotated[Session, Depends(get_db)]
+
 from app.dependencies import (
     is_superadmin, get_password_hash, log_activity,
-    SuperAdminUser, DbSession
+    SuperAdminUser
 )
 
 logger = logging.getLogger(__name__)
